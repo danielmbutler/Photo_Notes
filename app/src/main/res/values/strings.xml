@@ -3,4 +3,5 @@
     <string name="create_note">Create Note</string>
     <string name="photo_notes">Photo Notes</string>
     <string name="delete_note">Delete Note</string>
+    <string name="edit_note">Edit Note</string>
 </resources>
