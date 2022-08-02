@@ -1,27 +1,43 @@
+package com.dbtechprojects.photonotes
+import android.app.Application
+import android.content.Context
+import androidx.room.Room
+import com.dbtechprojects.photonotes.persistence.NotesDao
+import com.dbtechprojects.photonotes.persistence.NotesDatabase
+
 class PhotoNotesApp : Application(){
+
+    private var db : NotesDatabase? = null
+
 
     init {
         instance = this
-        db = getDb()
     }
 
-    private fun getDb = Room.databaseBuilder(
-        applicationContext(),
-        NotesDatabase::class.java, Constants.DATABASE_TITLE
-    ).fallbackToDestructiveMigration()// remove in prod
-        .build()
+    private fun getDb(): NotesDatabase {
+        if (db != null){
+            return db!!
+        } else {
+            db = Room.databaseBuilder(
+                instance!!.applicationContext,
+                NotesDatabase::class.java, Constants.DATABASE_NAME
+            ).fallbackToDestructiveMigration()// remove in prod
+                .build()
+            return db!!
+        }
+    }
 
 
     companion object {
         private var instance: PhotoNotesApp? = null
-        private var db : NotesDatabase? = null
+
 
         fun applicationContext() : Context {
             return instance!!.applicationContext
         }
 
-        fun getDao() {
-            return instance!!.db.NotesDao()
+        fun getDao(): NotesDao {
+            return instance!!.getDb().NotesDao()
         }
 
     }

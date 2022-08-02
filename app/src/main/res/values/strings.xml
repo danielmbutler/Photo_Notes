@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Photo Notes</string>
     <string name="create_note">Create Note</string>
+    <string name="add_photo">Add Photo</string>
     <string name="photo_notes">Photo Notes</string>
     <string name="delete_note">Delete Note</string>
     <string name="edit_note">Edit Note</string>
+    <string name="save_note">Save Note</string>
 </resources>

@@ -1,5 +1,6 @@
-package com.dbtechprojects.photonotes.ui.EditNote
+package com.dbtechprojects.photonotes.ui.createNote
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -24,13 +26,12 @@ import com.dbtechprojects.photonotes.test.TestConstants
 import com.dbtechprojects.photonotes.ui.GenericAppBar
 import com.dbtechprojects.photonotes.ui.NotesList.NotesFab
 import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
-
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun NoteEditScreen(noteId: Int, navController: NavController){
-    val note = TestConstants.notes.find{ note -> note.id == noteId  } ?: Note(note = "Cannot find note details", id = 0, title = "Cannot find note details")
+fun CreateNoteScreen(navController: NavController){
 
-    val currentNote = remember{ mutableStateOf(note.note)}
-    val currentTitle = remember{ mutableStateOf(note.title)}
+    val currentNote = remember{ mutableStateOf("")}
+    val currentTitle = remember{ mutableStateOf("")}
     val saveButtonState = remember{ mutableStateOf(false)}
     PhotoNotesTheme{
         // A surface container using the 'background' color from the theme
@@ -38,7 +39,7 @@ fun NoteEditScreen(noteId: Int, navController: NavController){
             Scaffold(
                 topBar = {
                     GenericAppBar(
-                        title = "Edit Note",
+                        title = "Create Note",
                         icon = {
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.save),
@@ -50,8 +51,9 @@ fun NoteEditScreen(noteId: Int, navController: NavController){
                         iconState = saveButtonState
                     )
                 },
-                content = {
+                floatingActionButton = { NotesFab(contentDescription = stringResource(R.string.add_photo), action = {}, icon = R.drawable.camera) },
 
+                        content = {
                     Column(
                         Modifier
                             .background(Color.White)
@@ -62,12 +64,7 @@ fun NoteEditScreen(noteId: Int, navController: NavController){
                             value = currentTitle.value,
                             onValueChange = {value ->
                                 currentTitle.value = value
-                                if (currentTitle.value != note.title){
-                                    saveButtonState.value = true
-                                } else if (currentNote.value == note.note &&
-                                        currentTitle.value == note.title){
-                                    saveButtonState.value = false
-                                }
+                                saveButtonState.value = currentTitle.value != "" && currentNote.value != ""
                                             } ,
                             label = {Text(text = "Title")} 
                         )
@@ -76,12 +73,7 @@ fun NoteEditScreen(noteId: Int, navController: NavController){
                             value = currentNote.value ,
                             onValueChange = {value ->
                                 currentNote.value = value
-                                if (currentNote.value != note.note){
-                                    saveButtonState.value = true
-                                } else if (currentNote.value == note.note &&
-                                    currentTitle.value == note.title){
-                                    saveButtonState.value = false
-                                }
+                                saveButtonState.value = currentTitle.value != "" && currentNote.value != ""
                                             } ,
                             label = {Text(text = "Body")}
                         )

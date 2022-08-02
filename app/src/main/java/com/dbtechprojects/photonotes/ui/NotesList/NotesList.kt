@@ -1,5 +1,6 @@
 package com.dbtechprojects.photonotes.ui.NotesList
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -29,8 +30,10 @@ import com.dbtechprojects.photonotes.R
 import com.dbtechprojects.photonotes.model.Note
 import com.dbtechprojects.photonotes.model.getDay
 import com.dbtechprojects.photonotes.test.TestConstants
+import com.dbtechprojects.photonotes.ui.GenericAppBar
 import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
 import java.util.*
+
 
 @Composable
 fun NotesList(navController: NavController) {
@@ -41,13 +44,23 @@ fun NotesList(navController: NavController) {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
             Scaffold(
                 topBar = {
-                    PhotoNotesAppBar(
-                        title = stringResource(R.string.photo_notes), iconContentDescription = stringResource(
-                            R.string.delete_note
-                        ), openDialog, deleteText
+                    GenericAppBar(
+                        title = stringResource(R.string.photo_notes),
+                        onIconClick = {
+                            openDialog.value = true
+                            deleteText.value = "Are you sure you want to delete all notes ?"
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(
+                                    id = R.drawable.note_delete) ,
+                                contentDescription = stringResource(id = R.string.delete_note), tint = Color.White )
+                        },
+                        iconState = remember{ mutableStateOf(true)}
+
                     )
                 },
-                floatingActionButton = { NotesFab(contentDescription = stringResource(R.string.create_note), action = {}, icon = R.drawable.note_add_icon) }
+                floatingActionButton = { NotesFab(contentDescription = stringResource(R.string.create_note), action = {navController.navigate(Constants.NAVIGATION_NOTES_CREATE)}, icon = R.drawable.note_add_icon) }
 
             ) {
                 NotesList(notes = TestConstants.notes, openDialog, deleteText, navController)
@@ -58,26 +71,6 @@ fun NotesList(navController: NavController) {
 
         }
     }
-}
-
-@Composable
-fun PhotoNotesAppBar(
-    title: String,
-    iconContentDescription: String,
-    openDialog: MutableState<Boolean>,
-    text: MutableState<String>
-) {
-    TopAppBar(
-        title = { Text(title) },
-        backgroundColor = MaterialTheme.colors.primary,
-        actions = { IconButton(onClick = {
-            openDialog.value = true
-            text.value = "Are you sure you want to delete all notes ?"
-        }) {
-            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.note_delete) , contentDescription = iconContentDescription, tint = Color.White )
-        }
-        }
-    )
 }
 
 @Composable

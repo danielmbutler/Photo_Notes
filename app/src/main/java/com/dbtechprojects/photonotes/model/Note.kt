@@ -1,9 +1,14 @@
 package com.dbtechprojects.photonotes.model
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import com.dbtechprojects.photonotes.Constants
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@Entity(tableName = Constants.TABLE_NAME, indices = [Index(value = [id], unique = true)])
+@Entity(tableName = Constants.TABLE_NAME, indices = [Index(value = ["id"], unique = true)])
 data class Note (
     @PrimaryKey(autoGenerate = true)    val id: Int,
     @ColumnInfo(name = "note")          val note: String,
