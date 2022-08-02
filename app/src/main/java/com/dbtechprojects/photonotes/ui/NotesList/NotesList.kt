@@ -35,6 +35,7 @@ import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
 import java.util.*
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NotesList(navController: NavController) {
     val openDialog = remember { mutableStateOf(false) }

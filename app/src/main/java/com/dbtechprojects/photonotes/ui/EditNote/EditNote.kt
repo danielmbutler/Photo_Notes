@@ -1,5 +1,6 @@
 package com.dbtechprojects.photonotes.ui.EditNote
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +26,7 @@ import com.dbtechprojects.photonotes.ui.GenericAppBar
 import com.dbtechprojects.photonotes.ui.NotesList.NotesFab
 import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NoteEditScreen(noteId: Int, navController: NavController){
     val note = TestConstants.notes.find{ note -> note.id == noteId  } ?: Note(note = "Cannot find note details", id = 0, title = "Cannot find note details")

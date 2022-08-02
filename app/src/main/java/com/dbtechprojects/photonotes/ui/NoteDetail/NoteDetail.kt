@@ -1,5 +1,6 @@
 package com.dbtechprojects.photonotes.ui.NoteDetail
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -26,6 +27,7 @@ import com.dbtechprojects.photonotes.ui.NotesList.NotesFab
 import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NoteDetailScreen(noteId: Int, navController: NavController) {
     val note = TestConstants.notes.find { note -> note.id == noteId }
