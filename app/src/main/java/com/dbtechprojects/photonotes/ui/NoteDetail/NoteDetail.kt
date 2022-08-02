@@ -30,7 +30,7 @@ fun NoteDetailScreen(noteId: Int){
             Scaffold(
                 topBar = {
                     NoteDetailAppBar(
-                        title = stringResource(R.string.photo_notes),
+                        title = stringResource(note.title),
                     )
                 },
                 floatingActionButton = { NotesFab(contentDescription = stringResource(R.string.create_note), action = {}, icon = R.drawable.camera) }
@@ -67,7 +67,10 @@ fun NoteDetailAppBar(
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.edit_note) ,
                 contentDescription = stringResource(R.string.edit_note),
-                tint = Color.White
+                tint = Color.White,
+                onclick = {
+                        navController.navigate(Constants.noteEditNavigation(note.id))
+                }
             )
         }
     )

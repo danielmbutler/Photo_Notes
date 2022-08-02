@@ -56,4 +56,9 @@ dependencies {
     def nav_version = "2.5.1"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    //room DB
+    def roomVersion = "2.4.2"
+    implementation"androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 }

@@ -3,12 +3,13 @@ package com.dbtechprojects.photonotes.model
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+@Entity(tableName = Constants.TABLE_NAME, indices = [Index(value = [id], unique = true)])
 data class Note (
-    val id: Int,
-    val note: String,
-    val title: String,
-    val dateUpdated: String = getDateCreated(),
-    val imageUris: List<String>? = null
+    @PrimaryKey(autoGenerate = true)    val id: Int,
+    @ColumnInfo(name = "note")          val note: String,
+    @ColumnInfo(name = "title")         val title: String,
+    @ColumnInfo(name = "dateUpdated")   val dateUpdated: String = getDateCreated(),
+    @ColumnInfo(name = "imageUris")     val imageUris: List<String>? = null
 )
 
 fun getDateCreated(): String {
