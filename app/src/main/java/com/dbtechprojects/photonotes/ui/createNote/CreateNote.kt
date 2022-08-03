@@ -28,7 +28,7 @@ import com.dbtechprojects.photonotes.ui.NotesList.NotesFab
 import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun CreateNoteScreen(navController: NavController){
+fun CreateNoteScreen(navController: NavController, viewModel: NotesViewModel){
 
     val currentNote = remember{ mutableStateOf("")}
     val currentTitle = remember{ mutableStateOf("")}
@@ -56,7 +56,6 @@ fun CreateNoteScreen(navController: NavController){
                         content = {
                     Column(
                         Modifier
-                            .background(Color.White)
                             .padding(12.dp)
                             .fillMaxSize()
                     ) {

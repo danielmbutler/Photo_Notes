@@ -37,7 +37,7 @@ import java.util.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun NotesList(navController: NavController) {
+fun NotesList(navController: NavController, viewModel: NotesViewModel) {
     val openDialog = remember { mutableStateOf(false) }
     val deleteText = remember { mutableStateOf("") }
     PhotoNotesTheme {
@@ -113,7 +113,7 @@ fun NoteListItem(note: Note, openDialog: MutableState<Boolean>, text: MutableSta
     return Box(modifier = Modifier.clip(RoundedCornerShape(12.dp))) {
         Column(
             modifier = Modifier
-                .background(Color.White)
+                .background(noteColours.random())
                 .fillMaxWidth()
                 .combinedClickable(interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false), // You can also change the color and radius of the ripple

@@ -15,11 +15,15 @@ import com.dbtechprojects.photonotes.ui.createNote.CreateNoteScreen
 
 class MainActivity : ComponentActivity() {
 
+    private lateinit var notesViewModel : NotesViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val db = PhotoNotesApp.getDao()
+        // retrieve viewModel
+        notesViewModel =  NotesViewModelFactory(PhotoNotesApp.getDao()).get(NotesViewModel::class.java)
+
 
         setContent {
             val navController = rememberNavController()
@@ -28,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 startDestination = Constants.NAVIGATION_NOTES_LIST
             ) {
                 // Notes List
-                composable(Constants.NAVIGATION_NOTES_LIST) { NotesList(navController) }
+                composable(Constants.NAVIGATION_NOTES_LIST) { NotesList(navController, notesViewModel) }
 
                 // Notes Detail page
                 composable(
@@ -38,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     })
                 ) { backStackEntry ->
                     backStackEntry.arguments?.getInt(Constants.NAVIGATION_NOTE_ID_Argument)
-                        ?.let { NoteDetailScreen(noteId = it, navController) }
+                        ?.let { NoteDetailScreen(noteId = it, navController, notesViewModel) }
                 }
 
                 // Notes Edit page
@@ -49,11 +53,11 @@ class MainActivity : ComponentActivity() {
                     })
                 ) { backStackEntry ->
                     backStackEntry.arguments?.getInt(Constants.NAVIGATION_NOTE_ID_Argument)
-                        ?.let { NoteEditScreen(noteId = it, navController) }
+                        ?.let { NoteEditScreen(noteId = it, navController, notesViewModel) }
                 }
 
                 // Create Note Page
-                composable(Constants.NAVIGATION_NOTES_CREATE) { CreateNoteScreen(navController) }
+                composable(Constants.NAVIGATION_NOTES_CREATE) { CreateNoteScreen(navController, notesViewModel) }
 
             }
 

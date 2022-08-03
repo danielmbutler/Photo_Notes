@@ -29,7 +29,7 @@ import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun NoteDetailScreen(noteId: Int, navController: NavController) {
+fun NoteDetailScreen(noteId: Int, navController: NavController, viewModel: NotesViewModel) {
     val note = TestConstants.notes.find { note -> note.id == noteId }
         ?: Note(note = "Cannot find note details", id = 0, title = "Cannot find note details")
     PhotoNotesTheme {
@@ -63,7 +63,6 @@ fun NoteDetailScreen(noteId: Int, navController: NavController) {
             ) {
                 Column(
                     Modifier
-                        .background(Color.White)
                         .fillMaxSize()
                 ) {
                     Text(

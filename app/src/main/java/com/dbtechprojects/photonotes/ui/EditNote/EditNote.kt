@@ -28,7 +28,7 @@ import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun NoteEditScreen(noteId: Int, navController: NavController){
+fun NoteEditScreen(noteId: Int, navController: NavController, viewModel: NotesViewModel){
     val note = TestConstants.notes.find{ note -> note.id == noteId  } ?: Note(note = "Cannot find note details", id = 0, title = "Cannot find note details")
 
     val currentNote = remember{ mutableStateOf(note.note)}
@@ -56,7 +56,6 @@ fun NoteEditScreen(noteId: Int, navController: NavController){
 
                     Column(
                         Modifier
-                            .background(Color.White)
                             .padding(12.dp)
                             .fillMaxSize()
                     ) {
