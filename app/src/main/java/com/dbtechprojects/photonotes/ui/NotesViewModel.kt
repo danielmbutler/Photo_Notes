@@ -5,7 +5,6 @@ class NotesViewModel(
     val notes: LiveData<List<Note>> = db.getNotes()
 
 
-
     private fun deleteNotes(note: Note) {
         viewModelscope.launch(Dispatches.IO){
             db.deleteNote(note)

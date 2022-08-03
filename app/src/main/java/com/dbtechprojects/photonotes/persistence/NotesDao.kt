@@ -18,8 +18,8 @@ interface NotesDao {
     @Update
     fun updateNote(note: Note) : Int
 
-    @Query("SELECT * FROM Notes WHERE title LIKE '%' || :query || '%' OR  note LIKE '%' || :query || '%' ")
-    fun queryNotesByTitleAndContent(query: String) : List<Note>
+//    @Query("SELECT * FROM Notes WHERE title LIKE '%' || :query || '%' OR  note LIKE '%' || :query || '%' ")
+//    fun queryNotesByTitleAndContent(query: String) : List<Note>
 
     @Insert
     fun insertNote(note: Note)
