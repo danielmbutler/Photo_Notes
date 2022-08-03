@@ -7,7 +7,7 @@ import com.dbtechprojects.photonotes.model.Note
 interface NotesDao {
 
     @Query("SELECT * FROM Notes WHERE notes.id=:id")
-    fun getNoteById(id: Int) : Note
+    suspend fun getNoteById(id: Int) : Note?
 
     @Query("SELECT * FROM Notes ORDER BY dateUpdated DESC")
     fun getNotes() : LiveData<List<Note>>

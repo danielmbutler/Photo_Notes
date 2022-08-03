@@ -1,6 +1,7 @@
 package com.dbtechprojects.photonotes.ui.NoteDetail
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,34 +20,47 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.dbtechprojects.photonotes.Constants
+import com.dbtechprojects.photonotes.Constants.noteDetailPlaceHolder
 import com.dbtechprojects.photonotes.R
 import com.dbtechprojects.photonotes.model.Note
 import com.dbtechprojects.photonotes.test.TestConstants
 import com.dbtechprojects.photonotes.ui.GenericAppBar
 import com.dbtechprojects.photonotes.ui.NotesList.NotesFab
+import com.dbtechprojects.photonotes.ui.NotesViewModel
 import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NoteDetailScreen(noteId: Int, navController: NavController, viewModel: NotesViewModel) {
-    val note = TestConstants.notes.find { note -> note.id == noteId }
-        ?: Note(note = "Cannot find note details", id = 0, title = "Cannot find note details")
+    val scope = rememberCoroutineScope()
+    val note = remember {
+        mutableStateOf(noteDetailPlaceHolder)
+    }
+
+    LaunchedEffect(true){
+        scope.launch(Dispatchers.IO) {
+            note.value = viewModel.getNote(noteId) ?: noteDetailPlaceHolder
+        }
+    }
+
     PhotoNotesTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
             Scaffold(
                 topBar = {
                     GenericAppBar(
-                        title = note.title,
+                        title = note.value.title,
                         onIconClick = {
-                            navController.navigate(Constants.noteEditNavigation(note.id))
+                            navController.navigate(Constants.noteEditNavigation(note.value.id ?: 0))
                         },
                         icon = {
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.edit_note),
                                 contentDescription = stringResource(R.string.edit_note),
-                                tint = Color.White,
+                                tint = Color.Black,
                             )
                         },
                         iconState = remember{mutableStateOf(true)}
@@ -66,13 +80,13 @@ fun NoteDetailScreen(noteId: Int, navController: NavController, viewModel: Notes
                         .fillMaxSize()
                 ) {
                     Text(
-                        text = note.title,
-                        modifier = Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp),
+                        text = note.value.title,
+                        modifier = Modifier.padding(top = 24.dp, start = 12.dp, end = 24.dp),
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Text(text = note.dateUpdated, Modifier.padding(6.dp), color = Color.Gray)
-                    Text(text = note.note, Modifier.padding(12.dp))
+                    Text(text = note.value.dateUpdated, Modifier.padding(12.dp), color = Color.Gray)
+                    Text(text = note.value.note, Modifier.padding(12.dp))
                 }
 
             }

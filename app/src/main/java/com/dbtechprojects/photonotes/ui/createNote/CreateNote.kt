@@ -2,10 +2,7 @@ package com.dbtechprojects.photonotes.ui.createNote
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +22,7 @@ import com.dbtechprojects.photonotes.model.Note
 import com.dbtechprojects.photonotes.test.TestConstants
 import com.dbtechprojects.photonotes.ui.GenericAppBar
 import com.dbtechprojects.photonotes.ui.NotesList.NotesFab
+import com.dbtechprojects.photonotes.ui.NotesViewModel
 import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -35,7 +33,7 @@ fun CreateNoteScreen(navController: NavController, viewModel: NotesViewModel){
     val saveButtonState = remember{ mutableStateOf(false)}
     PhotoNotesTheme{
         // A surface container using the 'background' color from the theme
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.primary) {
             Scaffold(
                 topBar = {
                     GenericAppBar(
@@ -44,10 +42,13 @@ fun CreateNoteScreen(navController: NavController, viewModel: NotesViewModel){
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.save),
                                 contentDescription = stringResource(R.string.save_note),
-                                tint = Color.White,
+                                tint = Color.Black,
                             )
                         },
-                        onIconClick = { navController.popBackStack()  },
+                        onIconClick = {
+                            viewModel.createNote(currentTitle.value, currentNote.value)
+                            navController.popBackStack()
+                          },
                         iconState = saveButtonState
                     )
                 },
@@ -61,6 +62,11 @@ fun CreateNoteScreen(navController: NavController, viewModel: NotesViewModel){
                     ) {
                         TextField(
                             value = currentTitle.value,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = TextFieldDefaults.textFieldColors(
+                                cursorColor = Color.Black,
+                                focusedLabelColor = Color.Black,
+                            ),
                             onValueChange = {value ->
                                 currentTitle.value = value
                                 saveButtonState.value = currentTitle.value != "" && currentNote.value != ""
@@ -70,6 +76,11 @@ fun CreateNoteScreen(navController: NavController, viewModel: NotesViewModel){
                         Spacer(modifier = Modifier.padding(12.dp))
                         TextField(
                             value = currentNote.value ,
+                            colors = TextFieldDefaults.textFieldColors(
+                                cursorColor = Color.Black,
+                                focusedLabelColor = Color.Black,
+                            ),
+                            modifier = Modifier.fillMaxHeight(0.5f).fillMaxWidth(),
                             onValueChange = {value ->
                                 currentNote.value = value
                                 saveButtonState.value = currentTitle.value != "" && currentNote.value != ""

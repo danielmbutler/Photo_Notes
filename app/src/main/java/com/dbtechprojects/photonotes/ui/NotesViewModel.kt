@@ -1,47 +1,49 @@
+package com.dbtechprojects.photonotes.ui
+
+import androidx.lifecycle.*
+import com.dbtechprojects.photonotes.model.Note
+import com.dbtechprojects.photonotes.persistence.NotesDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 class NotesViewModel(
     private val db: NotesDao,
 ) : ViewModel() {
 
     val notes: LiveData<List<Note>> = db.getNotes()
 
-    private val _currentNote = MutableLiveData<Note>()
-    val currentNote : LiveData<Note> get() = _currentNote
 
-
-    private fun deleteNotes(note: Note) {
-        viewModelscope.launch(Dispatches.IO){
+     fun deleteNotes(note: Note) {
+        viewModelScope.launch(Dispatchers.IO){
             db.deleteNote(note)
         }
     }
 
-    private fun updateNote(note: Note) {
-        viewModelscope.launch(Dispatches.IO){
+     fun updateNote(note: Note) {
+        viewModelScope.launch(Dispatchers.IO){
             db.updateNote(note)
         }
     }
 
-    private fun createNote(title: String, note: String) {
-        viewModelscope.launch(Dispatches.IO){
-            db.createNote(Note(title = title, note = note))
+     fun createNote(title: String, note: String) {
+        viewModelScope.launch(Dispatchers.IO){
+            db.insertNote(Note(title = title, note = note))
         }
     }
 
-    private fun getNote(noteId : Int) {
-        viewModelscope.launch(Dispatches.IO){
-            _currentNote.postValue(db.getNoteById(noteId))
-        }
+     suspend fun getNote(noteId : Int) : Note? {
+        return db.getNoteById(noteId)
     }
 
 }
 
 class NotesViewModelFactory(
-    private val db: NotesDap,
+    private val db: NotesDao,
 ) : ViewModelProvider.NewInstanceFactory() {
-
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        NotesViewModel(
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return  NotesViewModel(
             db = db,
         ) as T
+    }
 
 }

@@ -3,7 +3,7 @@ package com.dbtechprojects.photonotes.test
 import com.dbtechprojects.photonotes.model.Note
 
 object TestConstants {
-    fun testNotes(): List<Note>{
+    private fun testNotes(): List<Note>{
         val notes = mutableListOf<Note>()
         val alphabet = listOf(
             'a',

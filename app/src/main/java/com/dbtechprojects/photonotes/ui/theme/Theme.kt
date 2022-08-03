@@ -8,11 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Teal200,
-    primaryVariant = Color.Cyan,
-    secondary = Purple500,
-    background = Color.BLACK,
-    onBackground = Color.WHITE
+    primary = Color.White,
+    background = Color.White,
+    onPrimary = Color.Black
 )
 
 //#f6c2d9	(246,194,217)
@@ -21,14 +19,14 @@ private val DarkColorPalette = darkColors(
 //#a1c8e9	(161,200,233)
 //#e4dae2	(228,218,226)
 
-val noteColors = listOf<Color>(Color(0xFFf6c2d9), Color(0xFFfff69b), Color(0xFFbcdfc9), Color(0xFFa1c8e9), Color(0xFFe4dae2))
+val noteBGYellow = Color(0xFFfff69b)
+val noteBGBlue = Color(0xFFa1c8e9)
+
 
 private val LightColorPalette = lightColors(
-    primary = Teal200,
-    primaryVariant = Color.Cyan,
-    secondary = Purple500,
-    background = Color.BLACK,
-    onBackground = Color.WHITE
+    primary = Color.White,
+    background = Color.White,
+    onPrimary = Color.Black,
 )
 
 @Composable

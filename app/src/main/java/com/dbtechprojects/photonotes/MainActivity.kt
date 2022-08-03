@@ -11,6 +11,8 @@ import androidx.navigation.navArgument
 import com.dbtechprojects.photonotes.ui.EditNote.NoteEditScreen
 import com.dbtechprojects.photonotes.ui.NoteDetail.NoteDetailScreen
 import com.dbtechprojects.photonotes.ui.NotesList.NotesList
+import com.dbtechprojects.photonotes.ui.NotesViewModel
+import com.dbtechprojects.photonotes.ui.NotesViewModelFactory
 import com.dbtechprojects.photonotes.ui.createNote.CreateNoteScreen
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // retrieve viewModel
-        notesViewModel =  NotesViewModelFactory(PhotoNotesApp.getDao()).get(NotesViewModel::class.java)
+        notesViewModel =  NotesViewModelFactory(PhotoNotesApp.getDao()).create(NotesViewModel::class.java)
 
 
         setContent {
