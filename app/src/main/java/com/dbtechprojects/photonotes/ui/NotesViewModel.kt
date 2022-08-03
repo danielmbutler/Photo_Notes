@@ -4,6 +4,9 @@ class NotesViewModel(
 
     val notes: LiveData<List<Note>> = db.getNotes()
 
+    private val _currentNote = MutableLiveData<Note>()
+    val currentNote : LiveData<Note> get() = _currentNote
+
 
     private fun deleteNotes(note: Note) {
         viewModelscope.launch(Dispatches.IO){
@@ -20,6 +23,12 @@ class NotesViewModel(
     private fun createNote(title: String, note: String) {
         viewModelscope.launch(Dispatches.IO){
             db.createNote(Note(title = title, note = note))
+        }
+    }
+
+    private fun getNote(noteId : Int) {
+        viewModelscope.launch(Dispatches.IO){
+            _currentNote.postValue(db.getNoteById(noteId))
         }
     }
 
