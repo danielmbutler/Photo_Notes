@@ -2,6 +2,9 @@ package com.dbtechprojects.photonotes.ui.NotesList
 
 import android.annotation.SuppressLint
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -44,6 +47,7 @@ import com.dbtechprojects.photonotes.ui.theme.noteBGYellow
 fun NotesList(navController: NavController, viewModel: NotesViewModel) {
     val openDialog = remember { mutableStateOf(false) }
     val deleteText = remember { mutableStateOf("") }
+    val notesQuery = remember { mutableStateOf("") }
     val notesToDelete = remember { mutableStateOf(listOf<Note>()) }
     val notes = viewModel.notes.observeAsState()
     val context = LocalContext.current
@@ -60,7 +64,8 @@ fun NotesList(navController: NavController, viewModel: NotesViewModel) {
                                 deleteText.value = "Are you sure you want to delete all notes ?"
                                 notesToDelete.value = notes.value ?: emptyList()
                             } else {
-                                Toast.makeText(context, "No Notes found.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "No Notes found.", Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         },
                         icon = {
@@ -85,13 +90,18 @@ fun NotesList(navController: NavController, viewModel: NotesViewModel) {
                 }
 
             ) {
-                NotesList(
-                    notes = notes.value.orPlaceHolderList(),
-                    openDialog,
-                    deleteText,
-                    navController,
-                    notesToDelete = notesToDelete
-                )
+                Column() {
+                    SearchBar(notesQuery)
+                    NotesList(
+                        notes = notes.value.orPlaceHolderList(),
+                        query = notesQuery,
+                        openDialog = openDialog,
+                        deleteText = deleteText,
+                        navController = navController,
+                        notesToDelete = notesToDelete
+                    )
+                }
+
                 DeleteDialog(
                     openDialog = openDialog,
                     text = deleteText,
@@ -108,10 +118,47 @@ fun NotesList(navController: NavController, viewModel: NotesViewModel) {
 }
 
 @Composable
+fun SearchBar(query: MutableState<String>) {
+    Column(Modifier.padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 0.dp)) {
+        TextField(
+            value = query.value,
+            placeholder = { Text("Search..") },
+            maxLines = 1,
+            onValueChange = { query.value = it },
+            modifier = Modifier
+                .background(Color.White)
+                .clip(RoundedCornerShape(12.dp))
+                .fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = Color.Black,
+            ),
+            trailingIcon = {
+                AnimatedVisibility(
+                    visible = query.value.isNotEmpty(),
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    IconButton(onClick = { query.value = "" }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.icon_cross),
+                            contentDescription = stringResource(
+                                R.string.clear_search
+                            )
+                        )
+                    }
+                }
+
+            })
+
+    }
+}
+
+@Composable
 fun NotesList(
     notes: List<Note>,
     openDialog: MutableState<Boolean>,
-    text: MutableState<String>,
+    query: MutableState<String>,
+    deleteText: MutableState<String>,
     navController: NavController,
     notesToDelete: MutableState<List<Note>>,
 ) {
@@ -120,8 +167,12 @@ fun NotesList(
         contentPadding = PaddingValues(12.dp),
         modifier = Modifier.background(MaterialTheme.colors.primary)
     ) {
-
-        itemsIndexed(notes) { index, note ->
+        val queriedNotes = if (query.value.isEmpty()){
+            notes
+        } else {
+            notes.filter { it.note.contains(query.value) || it.title.contains(query.value) }
+        }
+        itemsIndexed(queriedNotes) { index, note ->
             if (note.getDay() != previousHeader.value) {
                 Column(
                     modifier = Modifier
@@ -142,7 +193,7 @@ fun NotesList(
             NoteListItem(
                 note,
                 openDialog,
-                text,
+                deleteText = deleteText ,
                 navController,
                 notesToDelete = notesToDelete,
                 noteBackGround = if (index % 2 == 0) {
@@ -163,7 +214,7 @@ fun NotesList(
 fun NoteListItem(
     note: Note,
     openDialog: MutableState<Boolean>,
-    text: MutableState<String>,
+    deleteText: MutableState<String>,
     navController: NavController,
     noteBackGround: Color,
     notesToDelete: MutableState<List<Note>>
@@ -184,7 +235,7 @@ fun NoteListItem(
                     onLongClick = {
                         if (note.id != 0) {
                             openDialog.value = true
-                            text.value = "Are you sure you want to delete this note ?"
+                            deleteText.value = "Are you sure you want to delete this note ?"
                             notesToDelete.value = mutableListOf(note)
                         }
                     }
