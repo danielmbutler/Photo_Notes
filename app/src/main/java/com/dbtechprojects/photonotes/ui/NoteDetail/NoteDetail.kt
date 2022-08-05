@@ -40,7 +40,8 @@ fun NoteDetailScreen(noteId: Int, navController: NavController, viewModel: Notes
         mutableStateOf(noteDetailPlaceHolder)
     }
 
-    LaunchedEffect(true){
+
+    LaunchedEffect(true) {
         scope.launch(Dispatchers.IO) {
             note.value = viewModel.getNote(noteId) ?: noteDetailPlaceHolder
         }
@@ -63,18 +64,15 @@ fun NoteDetailScreen(noteId: Int, navController: NavController, viewModel: Notes
                                 tint = Color.Black,
                             )
                         },
-                        iconState = remember{mutableStateOf(true)}
+                        iconState = remember { mutableStateOf(true) }
                     )
                 },
-                floatingActionButton = {
-                    NotesFab(
-                        contentDescription = stringResource(R.string.create_note),
-                        action = {},
-                        icon = R.drawable.camera
-                    )
-                }
 
             ) {
+                if (note.value.imageUris.isNotEmpty()){
+                    // load photos
+                    //URI.parse(uri)
+                }
                 Column(
                     Modifier
                         .fillMaxSize()

@@ -242,6 +242,11 @@ fun NoteListItem(
                 )
 
         ) {
+            if (note.imageUris.isNotEmpty()){
+                // load images
+                //URI.parse(uri)
+            }
+
             Text(
                 text = note.title,
                 color = Color.Black,

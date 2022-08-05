@@ -25,7 +25,7 @@ class NotesViewModel(
         }
     }
 
-     fun createNote(title: String, note: String) {
+     fun createNote(title: String, note: String, images: List<String>) {
         viewModelScope.launch(Dispatchers.IO){
             db.insertNote(Note(title = title, note = note))
         }

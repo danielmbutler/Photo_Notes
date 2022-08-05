@@ -33,6 +33,7 @@ fun NoteEditScreen(noteId: Int, navController: NavController, viewModel: NotesVi
 
     val currentNote = remember { mutableStateOf(note.value.note) }
     val currentTitle = remember { mutableStateOf(note.value.title) }
+    val currentPhotos = remember {mutableStateOf(note.value.imageUris)}
 
     LaunchedEffect(true) {
         scope.launch(Dispatchers.IO) {
@@ -63,14 +64,37 @@ fun NoteEditScreen(noteId: Int, navController: NavController, viewModel: NotesVi
                                 Note(
                                     id = note.value.id,
                                     note = currentNote.value,
-                                    title = currentTitle.value
+                                    title = currentTitle.value,
+                                    imageUris = currentPhotos.value
                                 ))
                             navController.popBackStack()
                         },
                         iconState = saveButtonState
                     )
                 },
+                floatingActionButton = NotesFab(
+                    contentDescription = stringResource(R.string.open_Camera),
+                    action = {
+                        private val getImageRequest =
+
+                            registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                                currentPhotos.value = mutableListOf(currentPhotos.value).apply{
+                                    add(uri.toString())
+                                }
+                            }
+
+
+                        getImageRequest.launch("image/*")
+
+                    },
+                    icon = R.drawable.camera
+                )
                 content = {
+
+                    if (currentPhotos.value.isNotEmpty()){
+                        // load images
+                        //URI.parse(uri)
+                    }
 
                     Column(
                         Modifier

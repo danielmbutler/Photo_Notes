@@ -24,14 +24,16 @@ import com.dbtechprojects.photonotes.ui.GenericAppBar
 import com.dbtechprojects.photonotes.ui.NotesList.NotesFab
 import com.dbtechprojects.photonotes.ui.NotesViewModel
 import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
+
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun CreateNoteScreen(navController: NavController, viewModel: NotesViewModel){
+fun CreateNoteScreen(navController: NavController, viewModel: NotesViewModel) {
 
-    val currentNote = remember{ mutableStateOf("")}
-    val currentTitle = remember{ mutableStateOf("")}
-    val saveButtonState = remember{ mutableStateOf(false)}
-    PhotoNotesTheme{
+    val currentNote = remember { mutableStateOf("") }
+    val currentTitle = remember { mutableStateOf("") }
+    val currentPhotos = remember {mutableStateOf(note.value.imageUris)}
+    val saveButtonState = remember { mutableStateOf(false) }
+    PhotoNotesTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.primary) {
             Scaffold(
@@ -46,15 +48,37 @@ fun CreateNoteScreen(navController: NavController, viewModel: NotesViewModel){
                             )
                         },
                         onIconClick = {
-                            viewModel.createNote(currentTitle.value, currentNote.value)
+                            viewModel.createNote(currentTitle.value, currentNote.value , currentPhotos.value)
                             navController.popBackStack()
-                          },
+                        },
                         iconState = saveButtonState
                     )
                 },
-                floatingActionButton = { NotesFab(contentDescription = stringResource(R.string.add_photo), action = {}, icon = R.drawable.camera) },
+                floatingActionButton = NotesFab(
+                    contentDescription = stringResource(R.string.open_Camera),
+                    action = {
+                        private val getImageRequest =
 
-                        content = {
+                            registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                                currentPhotos.value = mutableListOf(currentPhotos.value).apply {
+                                    add(uri.toString())
+                                }
+                            }
+
+
+                        getImageRequest.launch("image/*")
+
+                    },
+                    icon = R.drawable.camera
+                ),
+
+                content = {
+
+                    if (currentPhotos.value.isNotEmpty()){
+                        // load images
+                        //URI.parse(uri)
+                    }
+
                     Column(
                         Modifier
                             .padding(12.dp)
@@ -67,25 +91,27 @@ fun CreateNoteScreen(navController: NavController, viewModel: NotesViewModel){
                                 cursorColor = Color.Black,
                                 focusedLabelColor = Color.Black,
                             ),
-                            onValueChange = {value ->
+                            onValueChange = { value ->
                                 currentTitle.value = value
-                                saveButtonState.value = currentTitle.value != "" && currentNote.value != ""
-                                            } ,
-                            label = {Text(text = "Title")} 
+                                saveButtonState.value =
+                                    currentTitle.value != "" && currentNote.value != ""
+                            },
+                            label = { Text(text = "Title") }
                         )
                         Spacer(modifier = Modifier.padding(12.dp))
                         TextField(
-                            value = currentNote.value ,
+                            value = currentNote.value,
                             colors = TextFieldDefaults.textFieldColors(
                                 cursorColor = Color.Black,
                                 focusedLabelColor = Color.Black,
                             ),
                             modifier = Modifier.fillMaxHeight(0.5f).fillMaxWidth(),
-                            onValueChange = {value ->
+                            onValueChange = { value ->
                                 currentNote.value = value
-                                saveButtonState.value = currentTitle.value != "" && currentNote.value != ""
-                                            } ,
-                            label = {Text(text = "Body")}
+                                saveButtonState.value =
+                                    currentTitle.value != "" && currentNote.value != ""
+                            },
+                            label = { Text(text = "Body") }
                         )
                     }
                 }
