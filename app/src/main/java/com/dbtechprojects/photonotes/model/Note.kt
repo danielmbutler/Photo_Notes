@@ -14,7 +14,7 @@ data class Note (
     @ColumnInfo(name = "note")          val note: String,
     @ColumnInfo(name = "title")         val title: String,
     @ColumnInfo(name = "dateUpdated")   val dateUpdated: String = getDateCreated(),
-    @ColumnInfo(name = "imageUris")     val imageUris: List<String>? = null
+    @ColumnInfo(name = "imageUri")     val imageUri: String? = null
 )
 
 fun getDateCreated(): String {

@@ -1,24 +1,31 @@
 package com.dbtechprojects.photonotes.ui.NoteDetail
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.dbtechprojects.photonotes.Constants
 import com.dbtechprojects.photonotes.Constants.noteDetailPlaceHolder
 import com.dbtechprojects.photonotes.R
@@ -69,14 +76,27 @@ fun NoteDetailScreen(noteId: Int, navController: NavController, viewModel: Notes
                 },
 
             ) {
-                if (note.value.imageUris.isNotEmpty()){
-                    // load photos
-                    //URI.parse(uri)
-                }
                 Column(
                     Modifier
                         .fillMaxSize()
                 ) {
+
+                    if (note.value.imageUri != null && note.value.imageUri!!.isNotEmpty()) {
+                        Image(
+                            painter = rememberAsyncImagePainter(
+                                ImageRequest
+                                    .Builder(LocalContext.current)
+                                    .data(data = Uri.parse(note.value.imageUri))
+                                    .build()
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxHeight(0.3f)
+                                .fillMaxWidth()
+                                .padding(6.dp),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                     Text(
                         text = note.value.title,
                         modifier = Modifier.padding(top = 24.dp, start = 12.dp, end = 24.dp),

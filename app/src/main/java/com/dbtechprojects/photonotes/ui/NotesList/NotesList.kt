@@ -1,17 +1,17 @@
 package com.dbtechprojects.photonotes.ui.NotesList
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
@@ -24,12 +24,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.dbtechprojects.photonotes.Constants
 import com.dbtechprojects.photonotes.Constants.orPlaceHolderList
 import com.dbtechprojects.photonotes.R
@@ -220,11 +223,12 @@ fun NoteListItem(
     notesToDelete: MutableState<List<Note>>
 ) {
 
-    return Box(modifier = Modifier.clip(RoundedCornerShape(12.dp))) {
+    return Box(modifier = Modifier.height(120.dp).clip(RoundedCornerShape(12.dp))) {
         Column(
             modifier = Modifier
                 .background(noteBackGround)
                 .fillMaxWidth()
+                .height(120.dp)
                 .combinedClickable(interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false), // You can also change the color and radius of the ripple
                     onClick = {
@@ -242,28 +246,43 @@ fun NoteListItem(
                 )
 
         ) {
-            if (note.imageUris.isNotEmpty()){
-                // load images
-                //URI.parse(uri)
-            }
+            Row(){
+                if (note.imageUri != null && note.imageUri.isNotEmpty()){
+                    // load firs image into view
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            ImageRequest
+                                .Builder(LocalContext.current)
+                                .data(data = Uri.parse(note.imageUri))
+                                .build()
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth(0.3f),
+                        contentScale = ContentScale.Crop
+                    )
+                }
 
-            Text(
-                text = note.title,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 12.dp)
-            )
-            Text(
-                text = note.note,
-                color = Color.Black,
-                maxLines = 3,
-                modifier = Modifier.padding(12.dp)
-            )
-            Text(
-                text = note.dateUpdated,
-                color = Color.Black,
-                modifier = Modifier.padding(horizontal = 12.dp)
-            )
+                Column() {
+                    Text(
+                        text = note.title,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+                    Text(
+                        text = note.note,
+                        color = Color.Black,
+                        maxLines = 3,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                    Text(
+                        text = note.dateUpdated,
+                        color = Color.Black,
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+                }
+            }
 
         }
     }

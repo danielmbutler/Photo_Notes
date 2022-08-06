@@ -7,4 +7,5 @@
     <string name="edit_note">Edit Note</string>
     <string name="save_note">Save Note</string>
     <string name="clear_search">clear search</string>
+    <string name="add_image">Add Image</string>
 </resources>

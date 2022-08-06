@@ -1,6 +1,8 @@
 package com.dbtechprojects.photonotes
 import android.app.Application
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.room.Room
 import com.dbtechprojects.photonotes.persistence.NotesDao
 import com.dbtechprojects.photonotes.persistence.NotesDatabase
@@ -38,6 +40,13 @@ class PhotoNotesApp : Application(){
 
         fun getDao(): NotesDao {
             return instance!!.getDb().NotesDao()
+        }
+
+        fun getUriPermission(uri: Uri){
+            instance!!.applicationContext.contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
         }
 
     }
