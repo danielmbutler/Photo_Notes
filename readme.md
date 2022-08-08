@@ -12,6 +12,6 @@ A typical notes app with photos built in Jetpack Compose,
 
 ## ScreenShots
 
-![alt text](https://github.com/danielmbutler/photoNotes/blob/master/res/home.png)
-![alt text](https://github.com/danielmbutler/photoNotes/blob/master/res/detail.png)
-![alt text](https://github.com/danielmbutler/photoNotes/blob/master/res/create.png)
+![alt text](https://github.com/danielmbutler/Photo_Notes/blob/master/res/home.png)
+![alt text](https://github.com/danielmbutler/Photo_Notes/blob/master/res/detail.png)
+![alt text](https://github.com/danielmbutler/Photo_Notes/blob/master/res/create.png)
