@@ -1,18 +1,14 @@
 package com.dbtechprojects.photonotes.ui.EditNote
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -44,7 +40,7 @@ fun NoteEditScreen(noteId: Int, navController: NavController, viewModel: NotesVi
 
     val currentNote = remember { mutableStateOf(note.value.note) }
     val currentTitle = remember { mutableStateOf(note.value.title) }
-    val currentPhotos = remember {mutableStateOf(note.value.imageUri)}
+    val currentPhotos = remember { mutableStateOf(note.value.imageUri) }
     val saveButtonState = remember { mutableStateOf(false) }
 
     val getImageRequest = rememberLauncherForActivityResult(
@@ -92,7 +88,8 @@ fun NoteEditScreen(noteId: Int, navController: NavController, viewModel: NotesVi
                                     note = currentNote.value,
                                     title = currentTitle.value,
                                     imageUri = currentPhotos.value
-                                ))
+                                )
+                            )
                             navController.popBackStack()
                         },
                         iconState = saveButtonState

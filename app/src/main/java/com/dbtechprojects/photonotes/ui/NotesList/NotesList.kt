@@ -11,7 +11,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
@@ -165,7 +164,7 @@ fun NotesList(
     navController: NavController,
     notesToDelete: MutableState<List<Note>>,
 ) {
-    val previousHeader = remember { mutableStateOf("") }
+    var previousHeader = ""
     LazyColumn(
         contentPadding = PaddingValues(12.dp),
         modifier = Modifier.background(MaterialTheme.colors.primary)
@@ -176,7 +175,7 @@ fun NotesList(
             notes.filter { it.note.contains(query.value) || it.title.contains(query.value) }
         }
         itemsIndexed(queriedNotes) { index, note ->
-            if (note.getDay() != previousHeader.value) {
+            if (note.getDay() != previousHeader) {
                 Column(
                     modifier = Modifier
                         .padding(6.dp)
@@ -189,7 +188,7 @@ fun NotesList(
                         .fillMaxWidth()
                         .height(6.dp)
                 )
-                previousHeader.value = note.getDay()
+                previousHeader =  note.getDay()
             }
 
 

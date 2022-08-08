@@ -2,18 +2,11 @@ package com.dbtechprojects.photonotes.ui.NoteDetail
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -29,10 +22,7 @@ import coil.request.ImageRequest
 import com.dbtechprojects.photonotes.Constants
 import com.dbtechprojects.photonotes.Constants.noteDetailPlaceHolder
 import com.dbtechprojects.photonotes.R
-import com.dbtechprojects.photonotes.model.Note
-import com.dbtechprojects.photonotes.test.TestConstants
 import com.dbtechprojects.photonotes.ui.GenericAppBar
-import com.dbtechprojects.photonotes.ui.NotesList.NotesFab
 import com.dbtechprojects.photonotes.ui.NotesViewModel
 import com.dbtechprojects.photonotes.ui.theme.PhotoNotesTheme
 import kotlinx.coroutines.Dispatchers
