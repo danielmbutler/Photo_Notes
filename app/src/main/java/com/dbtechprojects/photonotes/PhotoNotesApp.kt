@@ -17,26 +17,21 @@ class PhotoNotesApp : Application(){
     }
 
     private fun getDb(): NotesDatabase {
-        if (db != null){
-            return db!!
+        return if (db != null){
+            db!!
         } else {
             db = Room.databaseBuilder(
                 instance!!.applicationContext,
                 NotesDatabase::class.java, Constants.DATABASE_NAME
             ).fallbackToDestructiveMigration()// remove in prod
                 .build()
-            return db!!
+            db!!
         }
     }
 
 
     companion object {
         private var instance: PhotoNotesApp? = null
-
-
-        fun applicationContext() : Context {
-            return instance!!.applicationContext
-        }
 
         fun getDao(): NotesDao {
             return instance!!.getDb().NotesDao()
