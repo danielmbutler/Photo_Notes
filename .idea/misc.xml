@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/PhotoNotes/app/src/main/res/drawable/camera.xml" value="0.22" />
         <entry key="..\:/Users/Daniel/AndroidStudioProjects/PhotoNotes/app/src/main/res/drawable/camera.xml" value="0.1205" />
         <entry key="..\:/Users/Daniel/AndroidStudioProjects/PhotoNotes/app/src/main/res/drawable/note_add_icon.xml" value="0.114" />
       </map>

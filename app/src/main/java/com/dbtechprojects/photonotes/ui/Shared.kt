@@ -19,16 +19,15 @@ fun GenericAppBar(
         backgroundColor = MaterialTheme.colors.primary,
         actions = {
             IconButton(
-                onClick = {
-                    onIconClick?.invoke()
-                },
+                onClick = { onIconClick?.invoke() },
                 content = {
-                    if (iconState.value){
+                    if (iconState.value) {
                         icon?.invoke()
                     }
                 }
-
             )
         }
+
     )
+
 }

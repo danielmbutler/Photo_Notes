@@ -1,45 +1,38 @@
 package com.dbtechprojects.photonotes
+
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.room.Room
+import com.dbtechprojects.photonotes.persistence.NoteDBRealm
 import com.dbtechprojects.photonotes.persistence.NotesDao
-import com.dbtechprojects.photonotes.persistence.NotesDatabase
+import io.realm.Realm
+import io.realm.RealmConfiguration
 
-class PhotoNotesApp : Application(){
-
-    private var db : NotesDatabase? = null
-
+class PhotoNotesApp : Application() {
+    private var db : RealmConfiguration? = null
 
     init {
         instance = this
     }
 
-    private fun getDb(): NotesDatabase {
-        if (db != null){
-            return db!!
+    private fun getDb() : RealmConfiguration {
+        return if (db != null){
+            db!!
         } else {
-            db = Room.databaseBuilder(
-                instance!!.applicationContext,
-                NotesDatabase::class.java, Constants.DATABASE_NAME
-            ).fallbackToDestructiveMigration()// remove in prod
+            Realm.init(instance!!.applicationContext)
+            db = RealmConfiguration.Builder()
+                .schemaVersion(1)
                 .build()
-            return db!!
+            Realm.setDefaultConfiguration(db)
+            db!!
         }
     }
-
 
     companion object {
         private var instance: PhotoNotesApp? = null
 
-
-        fun applicationContext() : Context {
-            return instance!!.applicationContext
-        }
-
-        fun getDao(): NotesDao {
-            return instance!!.getDb().NotesDao()
+        fun getDao() : NotesDao {
+            return NoteDBRealm(instance!!.getDb())
         }
 
         fun getUriPermission(uri: Uri){
@@ -48,8 +41,5 @@ class PhotoNotesApp : Application(){
                 Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
         }
-
     }
-
-
 }

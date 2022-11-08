@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'realm-android'
 }
 
 android {
@@ -73,5 +74,9 @@ dependencies {
 
     //gson
     implementation 'com.google.code.gson:gson:2.9.1'
+
+    // realm
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt'
+    implementation 'io.realm.kotlin:library-base:1.2.0'
 
 }
