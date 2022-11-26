@@ -1,8 +1,14 @@
 package com.dbtechprojects.photonotes
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,17 +20,21 @@ import com.dbtechprojects.photonotes.ui.NotesList.NotesList
 import com.dbtechprojects.photonotes.ui.NotesViewModel
 import com.dbtechprojects.photonotes.ui.NotesViewModelFactory
 import com.dbtechprojects.photonotes.ui.createNote.CreateNoteScreen
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var notesViewModel : NotesViewModel
 
+    //create datastore
+    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // retrieve viewModel
-        notesViewModel =  NotesViewModelFactory(PhotoNotesApp.getDao()).create(NotesViewModel::class.java)
+        notesViewModel =  NotesViewModelFactory(PhotoNotesApp.getDao(), dataStore).create(NotesViewModel::class.java)
 
 
         setContent {

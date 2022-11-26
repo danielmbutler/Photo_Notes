@@ -14,11 +14,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -52,14 +50,28 @@ fun NotesList(navController: NavController, viewModel: NotesViewModel) {
     val notesQuery = remember { mutableStateOf("") }
     val notesToDelete = remember { mutableStateOf(listOf<Note>()) }
     val notes = viewModel.notes.observeAsState()
+    val name = viewModel.nameFlow.collectAsState(0)
+    val currentName = remember {
+        mutableStateOf("")
+    }
     val context = LocalContext.current
+
+    if (name.value == null){
+        NameDialog(saveName = viewModel::saveName, currentName = currentName )
+    }
+
     PhotoNotesTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.primary) {
             Scaffold(
                 topBar = {
                     GenericAppBar(
-                        title = stringResource(R.string.photo_notes),
+                        title =
+                        if (name.value == null){
+                            stringResource(R.string.photo_notes)
+                        } else {
+                               "Welcome ${name.value}"
+                               } ,
                         onIconClick = {
                             if (notes.value?.isNotEmpty() == true) {
                                 openDialog.value = true
@@ -156,6 +168,43 @@ fun SearchBar(query: MutableState<String>) {
 }
 
 @Composable
+fun NameDialog(saveName : (String) -> Unit, currentName: MutableState<String>) {
+    AlertDialog(
+        onDismissRequest = {},
+        title = { Text(text = "Please Provide Name") },
+        buttons = {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                Button(
+                    onClick = {
+                        saveName.invoke(currentName.value)
+                    },
+
+                    ) {
+                    Text(text = "Save")
+                }
+            }
+
+        },
+        text = {
+            TextField(
+                value = currentName.value,
+                colors = TextFieldDefaults.textFieldColors(
+                    cursorColor = Color.Black,
+                    focusedLabelColor = Color.Black,
+                ),
+                onValueChange = { value ->
+                    currentName.value = value
+                },
+                label = { Text(text = "Name") }
+            )
+        }
+    )
+
+}
+
+@Composable
 fun NotesList(
     notes: List<Note>,
     openDialog: MutableState<Boolean>,
@@ -222,7 +271,9 @@ fun NoteListItem(
     notesToDelete: MutableState<List<Note>>
 ) {
 
-    return Box(modifier = Modifier.height(120.dp).clip(RoundedCornerShape(12.dp))) {
+    return Box(modifier = Modifier
+        .height(120.dp)
+        .clip(RoundedCornerShape(12.dp))) {
         Column(
             modifier = Modifier
                 .background(noteBackGround)
