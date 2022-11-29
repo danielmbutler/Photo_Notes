@@ -46,18 +46,22 @@ import com.dbtechprojects.photonotes.ui.theme.noteBGYellow
 @Composable
 fun NotesList(navController: NavController, viewModel: NotesViewModel) {
     val openDialog = remember { mutableStateOf(false) }
+    val openNameDialog = remember { mutableStateOf(false) }
     val deleteText = remember { mutableStateOf("") }
     val notesQuery = remember { mutableStateOf("") }
     val notesToDelete = remember { mutableStateOf(listOf<Note>()) }
     val notes = viewModel.notes.observeAsState()
+
     val name = viewModel.nameFlow.collectAsState(0)
-    val currentName = remember {
-        mutableStateOf("")
-    }
+
     val context = LocalContext.current
 
-    if (name.value == null){
-        NameDialog(saveName = viewModel::saveName, currentName = currentName )
+    if (name.value == null || openNameDialog.value){
+        NameDialog(
+            saveName = viewModel::saveName,
+            currentName = name as State<String>,
+            openName = openNameDialog
+        )
     }
 
     PhotoNotesTheme {
@@ -72,6 +76,7 @@ fun NotesList(navController: NavController, viewModel: NotesViewModel) {
                         } else {
                                "Welcome ${name.value}"
                                } ,
+                        onTitleClick = {openNameDialog.value = true},
                         onIconClick = {
                             if (notes.value?.isNotEmpty() == true) {
                                 openDialog.value = true
@@ -168,7 +173,13 @@ fun SearchBar(query: MutableState<String>) {
 }
 
 @Composable
-fun NameDialog(saveName : (String) -> Unit, currentName: MutableState<String>) {
+fun NameDialog(
+    saveName: (String) -> Unit,
+    openName: MutableState<Boolean>,
+    currentName: State<String?>) {
+
+    val name = remember { mutableStateOf(currentName.value ?: "")}
+
     AlertDialog(
         onDismissRequest = {},
         title = { Text(text = "Please Provide Name") },
@@ -178,7 +189,8 @@ fun NameDialog(saveName : (String) -> Unit, currentName: MutableState<String>) {
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Button(
                     onClick = {
-                        saveName.invoke(currentName.value)
+                        saveName.invoke(name.value)
+                        openName.value = false
                     },
 
                     ) {
@@ -189,13 +201,13 @@ fun NameDialog(saveName : (String) -> Unit, currentName: MutableState<String>) {
         },
         text = {
             TextField(
-                value = currentName.value,
+                value =  name.value,
                 colors = TextFieldDefaults.textFieldColors(
                     cursorColor = Color.Black,
                     focusedLabelColor = Color.Black,
                 ),
                 onValueChange = { value ->
-                    currentName.value = value
+                    name.value = value
                 },
                 label = { Text(text = "Name") }
             )
